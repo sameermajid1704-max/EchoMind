@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EchoMind 2.0</title>
+<style>
+:root{--bg:#0a1020;--panel:#111a2d;--panel2:#17233b;--text:#eef4ff;--muted:#9eacc8;--blue:#71a7ff;--mint:#72e5c2;--border:#293754;--red:#ff9eae}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#172a4d 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:24px 16px 48px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#70a5ff,#75e5c3);color:#07111f;font-weight:900;font-size:20px}.eyebrow{color:var(--mint);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.brand h1{font-size:22px;margin:0}.muted{color:var(--muted)}.pill{border:1px solid var(--border);padding:7px 11px;border-radius:999px;color:var(--muted);font-size:12px}
+.hero{padding:26px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(120deg,rgba(113,167,255,.12),rgba(114,229,194,.06));margin-bottom:18px}.hero h2{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:8px 0 12px}.hero p{max-width:680px;color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}.card{background:rgba(17,26,45,.94);border:1px solid var(--border);border-radius:20px;padding:20px;min-width:0}.span8{grid-column:span 8}.span4{grid-column:span 4}.span6{grid-column:span 6}.span12{grid-column:span 12}.card h3{margin:0 0 4px;font-size:18px}.sub{font-size:13px;color:var(--muted);margin:0 0 16px}label{display:block;color:#c8d4ea;font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid var(--border);border-radius:11px;background:#0b1324;color:var(--text);padding:11px 12px;font:inherit}textarea{resize:vertical;min-height:74px}button{border:0;border-radius:11px;background:var(--blue);color:#07111f;padding:11px 14px;font-weight:800;cursor:pointer;font:inherit}button:hover{filter:brightness(1.08)}button.secondary{background:var(--panel2);border:1px solid var(--border);color:var(--text)}button.danger{background:transparent;color:var(--red);border:1px solid #70404d}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.stat{background:rgba(9,16,31,.55);border:1px solid var(--border);padding:13px;border-radius:14px}.stat strong{font-size:24px;display:block}.stat span{font-size:12px;color:var(--muted)}.topic{padding:14px 0;border-bottom:1px solid var(--border)}.topic:last-child{border-bottom:0}.topic-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.topic-title{font-weight:750}.tiny{font-size:12px;color:var(--muted)}.tag{display:inline-block;border:1px solid var(--border);border-radius:7px;padding:3px 7px;color:var(--mint);font-size:11px;margin:6px 5px 0 0}.empty{padding:22px;text-align:center;border:1px dashed var(--border);border-radius:14px;color:var(--muted)}.notice{font-size:12px;color:var(--muted);margin-top:12px}.progress{height:7px;border-radius:99px;background:#26334d;overflow:hidden;margin-top:8px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--mint))}.footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
+@media(max-width:760px){.span8,.span4,.span6{grid-column:span 12}.hero{padding:20px}.card{padding:16px}.stats{grid-template-columns:repeat(3,1fr)}.top{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><div class="logo">E</div><div><div class="eyebrow">Personal learning lab</div><h1>EchoMind <span class="muted">2.0</span></h1></div></div>
+  <div class="pill">PROTOTYPE · LOCAL STORAGE</div>
+</header>
+<section class="hero">
+  <div class="eyebrow">Learn · Remember · Improve</div>
+  <h2>Your learning memory,<br>made visible.</h2>
+  <p>Track what you study, test what you remember, and discover which explanation styles seem to help you most. This prototype works without an account or paid AI API.</p>
+  <div class="stats">
+    <div class="stat"><strong id="statTopics">0</strong><span>Topics tracked</span></div>
+    <div class="stat"><strong id="statMastered">0</strong><span>Strong topics (80%+)</span></div>
+    <div class="stat"><strong id="statDue">0</strong><span>Reviews due</span></div>
+  </div>
+</section>
+<div class="grid">
+  <section class="card span6">
+    <h3>＋ Add a learning session</h3><p class="sub">Save a topic and the result of a short quiz.</p>
+    <form id="sessionForm">
+      <label for="topic">Topic</label><input id="topic" required maxlength="80" placeholder="e.g. Linear equations">
+      <div class="row">
+        <div><label for="style">Explanation style</label><select id="style"><option>Step-by-step</option><option>Simple language</option><option>Visual analogy</option><option>Game-based example</option><option>Worked example</option></select></div>
+        <div><label for="score">Quiz score (%)</label><input id="score" type="number" min="0" max="100" value="60" required></div>
+      </div>
+      <label for="mistake">What was difficult? (optional)</label><textarea id="mistake" maxlength="400" placeholder="e.g. I forgot to change the sign"></textarea>
+      <div class="row" style="margin-top:14px"><button type="submit">Save session</button><button class="secondary" type="reset">Clear form</button></div>
+    </form>
+    <p class="notice">Scores are self-reported. EchoMind doesn't diagnose learning ability; it looks for patterns in your results.</p>
+  </section>
+  <section class="card span6">
+    <h3>◷ Review queue</h3><p class="sub">A simple starter schedule: 1 day, 3 days, then 7 days after a session.</p>
+    <div id="reviewList"></div>
+  </section>
+  <section class="card span8">
+    <h3>⌁ Learning memory</h3><p class="sub">Your topics and latest results, saved in this browser on this device.</p>
+    <div id="topicList"></div>
+  </section>
+  <section class="card span4">
+    <h3>✦ Explanation fingerprint</h3><p class="sub">Average scores by explanation style. More sessions make the comparison more useful.</p>
+    <div id="fingerprint"></div>
+    <p class="notice">A higher average is only an early clue—not proof that a style is best. Topic difficulty can affect scores.</p>
+  </section>
+  <section class="card span12">
+    <div class="row"><div><h3>Data controls</h3><p class="sub" style="margin-bottom:0">Export a backup or clear this browser's saved data.</p></div><button class="secondary" id="exportBtn">Export backup (.json)</button><button class="danger" id="clearBtn">Delete all data</button></div>
+    <p class="notice">Privacy: this starter stores data in localStorage. It is not automatically synced between your PC and phone. Export a backup before clearing browser data.</p>
+  </section>
+</div>
+<div class="footer">EchoMind 2.0 · Early prototype · Built for experimentation</div>
+</div>
+<script>
+const KEY = "echomind_sessions_v1";
+let sessions = [];
+try { sessions = JSON.parse(localStorage.getItem(KEY) || "[]"); if (!Array.isArray(sessions)) sessions=[]; } catch { sessions=[]; }
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const save = () => localStorage.setItem(KEY, JSON.stringify(sessions));
+const day = n => { const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); };
+function dueDate(s){ return s.nextReview || day(1); }
+function render(){
+  const latestByTopic = new Map();
+  sessions.forEach(s => { const key=s.topic.toLowerCase(); const old=latestByTopic.get(key); if(!old || s.createdAt>old.createdAt) latestByTopic.set(key,s); });
+  const latest=[...latestByTopic.values()];
+  $("statTopics").textContent=latest.length;
+  $("statMastered").textContent=latest.filter(s=>s.score>=80).length;
+  $("statDue").textContent=latest.filter(s=>dueDate(s)<=day(0)).length;
+  const topics=$("topicList");
+  if(!latest.length) topics.innerHTML='<div class="empty">No learning sessions yet.<br>Add your first topic above to start your learning memory.</div>';
+  else topics.innerHTML=latest.sort((a,b)=>b.createdAt-a.createdAt).map(s=>{
+    const pct=Math.max(0,Math.min(100,s.score));
+    return `<div class="topic"><div class="topic-head"><div><div class="topic-title">${esc(s.topic)}</div><div class="tiny">${new Date(s.createdAt).toLocaleDateString()} · ${esc(s.style)}</div></div><strong>${s.score}%</strong></div><div class="progress"><span style="width:${pct}%"></span></div>${s.mistake?`<div class="tiny" style="margin-top:8px">Challenge: ${esc(s.mistake)}</div>`:""}<div><span class="tag">${s.score>=80?"Strong result":s.score>=50?"Keep practising":"Needs review"}</span><span class="tag">Next review: ${esc(dueDate(s))}</span></div></div>`;
+  }).join("");
+  const due=latest.filter(s=>dueDate(s)<=day(0)).sort((a,b)=>dueDate(a).localeCompare(dueDate(b)));
+  $("reviewList").innerHTML=due.length?due.map(s=>`<div class="topic"><div class="topic-title">${esc(s.topic)}</div><div class="tiny">Last score: ${s.score}% · ${esc(s.style)}</div><div class="row" style="margin-top:9px"><button class="secondary" onclick="reviewed('${s.id}',false)">Review again tomorrow</button><button onclick="reviewed('${s.id}',true)">I know it</button></div></div>`).join(""):'<div class="empty">Nothing due today.<br>New topics appear here when their review date arrives.</div>';
+  const styles=[...new Set(sessions.map(s=>s.style))];
+  $("fingerprint").innerHTML=styles.length?styles.map(style=>{
+    const arr=sessions.filter(s=>s.style===style);const avg=Math.round(arr.reduce((n,s)=>n+s.score,0)/arr.length);
+    return `<div class="topic"><div class="topic-head"><div class="topic-title">${esc(style)}</div><strong>${avg}%</strong></div><div class="progress"><span style="width:${avg}%"></span></div><div class="tiny">${arr.length} session${arr.length===1?"":"s"}</div></div>`;
+  }).join(""):'<div class="empty">Your explanation-style patterns will appear here after you save sessions.</div>';
+}
+window.reviewed=(id,mastered)=>{
+ const s=sessions.find(x=>x.id===id); if(!s)return;
+ s.nextReview=day(mastered?7:1); s.lastReviewed=new Date().toISOString(); save(); render();
+};
+$("sessionForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const topic=$("topic").value.trim(); const score=Number($("score").value);
+ if(!topic || !Number.isFinite(score)||score<0||score>100){alert("Enter a topic and a score from 0 to 100.");return;}
+ const now=Date.now();
+ sessions.push({id:crypto.randomUUID?crypto.randomUUID():String(now)+Math.random(),topic,style:$("style").value,score, mistake:$("mistake").value.trim(),createdAt:now,nextReview:day(score>=80?3:1)});
+ save();e.target.reset();$("score").value=60;render();
+});
+$("exportBtn").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify({app:"EchoMind 2.0",exportedAt:new Date().toISOString(),sessions},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="echomind-backup.json";a.click();URL.revokeObjectURL(url);
+});
+$("clearBtn").addEventListener("click",()=>{
+ if(confirm("Delete all EchoMind data saved in this browser? Export a backup first if you need it.")){sessions=[];save();render();}
+});
+render();
+</script>
+</body>
+</html>
